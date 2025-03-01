@@ -1,0 +1,48 @@
+<!--=====================================
+    Componente de Indicador de Carga
+    Este div muestra un spinner giratorio mientras los datos se están cargando.
+    Solo se muestra cuando la variable 'preloader' es verdadera.
+======================================-->
+<div *ngIf="preloader" class="d-flex justify-content-center">
+    <!-- Spinner de Bootstrap con color amarillo y márgenes verticales -->
+    <div class="spinner-border text-warning my-3"></div>
+</div>
+
+<!--=====================================
+    Banner de Promoción Principal
+    Este componente muestra un banner de promoción con información dinámica.
+    Solo se muestra cuando:
+    1. La carga ha finalizado (preloader = false)
+    2. Los datos del banner están disponibles (topBanner != null)
+======================================-->
+<div 
+    *ngIf="!preloader && topBanner != null" 
+    class="ps-block--promotion-header bg--cover"
+    [style.background-image]="'url(' + path + 'img/banner/top/' + topBanner['IMG tag'] + ')'">
+    
+    <div class="container">
+        <!-- Sección izquierda del banner -->
+        <div class="ps-block__left">
+            <!-- Título principal (descuento) -->
+            <h3>{{topBanner['H3 tag']}}</h3>
+            
+            <figure>
+                <!-- Texto descriptivo del descuento -->
+                <p>{{topBanner['P1 tag']}}</p>
+                
+                <!-- Información sobre el producto o categoría en promoción -->
+                <h4>{{topBanner['H4 tag']}}</h4>
+            </figure>
+        </div>
+        
+        <!-- Sección central del banner -->
+        <div class="ps-block__center">
+            <!-- Instrucciones de promoción con código resaltado -->
+            <p>{{topBanner['P2 tag']}}<span>{{topBanner['Span tag']}}</span></p>
+        </div>
+        
+        <!-- Botón de llamada a la acción -->
+        <a class="ps-btn ps-btn--sm" href="#">{{topBanner['Button tag']}}</a>
+    </div>
+</div>
+

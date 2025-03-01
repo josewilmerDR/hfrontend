@@ -24,6 +24,12 @@
     ],
     "resolveJsonModule": true
   },
+  "include": [
+    "*.d.ts",
+    "src/**/*.ts",
+    "src/**/*.d.ts"
+  ],
+
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
