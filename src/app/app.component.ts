@@ -33,6 +33,7 @@ Amplify.configure(outputs);
     NewletterComponent,
     FooterComponent,
     HttpClientModule,
+    RouterOutlet,
   ],
 })
 export class AppComponent implements OnInit {
