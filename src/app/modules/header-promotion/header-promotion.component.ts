@@ -5,6 +5,11 @@ import { ProductsService } from '../../services/products.service';
 import { Subscription, catchError, finalize, of } from 'rxjs';
 
 // Interfaces para definir la estructura de datos
+// interface Category {
+//   'url': string;  // URL de la imagen
+// }
+
+// Interfaces para definir la estructura de datos
 interface TopBanner {
   'IMG tag': string;  // URL de la imagen
   'H3 tag': string;   // Texto del encabezado H3
@@ -18,6 +23,7 @@ interface TopBanner {
 // Define la estructura de los datos de productos
 interface ProductData {
   top_banner: string; // JSON serializado con datos del banner
+  category:string; // Datos de la categoría
   [key: string]: any; // Permitir otras propiedades
 }
 
@@ -33,6 +39,7 @@ export class HeaderPromotionComponent implements OnInit, OnDestroy {
   path: string = Path.url; // URL base para las imágenes
   topBanner: TopBanner | null = null; // Datos del banner (null si no hay datos)
   preloader = true; // Controla si se muestra el spinner de carga
+  category:string | null = null; // Objeto de la categoría seleccionada
   
   private subscription: Subscription | null = null; // Gestiona la suscripción a los datos
 
@@ -74,11 +81,21 @@ export class HeaderPromotionComponent implements OnInit, OnDestroy {
         if (randomItem && randomItem.top_banner) {
           // Convierte el string JSON a objeto JavaScript
           this.topBanner = JSON.parse(randomItem.top_banner);
+          this.category = randomItem['category'];
+          console.log(this.category);
         }
+        
       } catch (error) {
         // Captura errores durante el procesamiento de datos
         console.error('Error processing banner data:', error);
       }
     });
+  }
+
+  getBackgroundImageUrl(): string {
+    if (!this.topBanner || !this.category) {
+      return '';
+    }
+    return `url(${this.path}img/products/${this.category}/top/${this.topBanner['IMG tag']})`;
   }
 }

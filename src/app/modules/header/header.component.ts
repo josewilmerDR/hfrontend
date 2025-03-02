@@ -112,7 +112,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   callback() {
     if (!this.render) return; // Evita múltiples ejecuciones
     
-    console.log('Iniciando carga de subcategorías');
+    // console.log('Iniciando carga de subcategorías');
     this.render = false;
     
     // Almacena todas las subcategorías procesadas
@@ -123,7 +123,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     
     // Procesar cada lista de títulos por categoría
     this.arrayTitleList.forEach((titleList, categoryIndex) => {
-      console.log(`Procesando categoría ${categoryIndex} con ${titleList.length} títulos`);
+      // console.log(`Procesando categoría ${categoryIndex} con ${titleList.length} títulos`);
       
       // Procesar cada título en la lista
       for (let i in titleList) {
@@ -134,7 +134,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           .getFilterSubCategories('title_list', titleList[i])
           .subscribe({
             next: (data: any[]) => {
-              console.log(`Recibidas ${data.length} subcategorías para "${titleList[i]}"`);
+              // console.log(`Recibidas ${data.length} subcategorías para "${titleList[i]}"`);
               
               // Guardar datos recibidos
               arraySubCategories.push(data);
@@ -143,7 +143,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
               this.processSubcategories(arraySubCategories, titleList, i);
               
               pendingRequests--;
-              console.log(`Peticiones pendientes: ${pendingRequests}`);
+              // console.log(`Peticiones pendientes: ${pendingRequests}`);
             },
             error: (error) => {
               console.error(`Error al cargar subcategorías para ${titleList[i]}:`, error);
@@ -189,7 +189,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         item => item.title_list === currentTitle
       );
       
-      console.log(`Encontradas ${matchingSubcategories.length} subcategorías para "${currentTitle}"`);
+      // console.log(`Encontradas ${matchingSubcategories.length} subcategorías para "${currentTitle}"`);
       
       // Seleccionar el elemento del DOM para este título
       const $element = $(`[titleList='${currentTitle}']`);

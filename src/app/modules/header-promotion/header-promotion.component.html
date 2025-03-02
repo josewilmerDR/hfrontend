@@ -18,7 +18,7 @@
 <div 
     *ngIf="!preloader && topBanner != null" 
     class="ps-block--promotion-header bg--cover"
-    [style.background-image]="'url(' + path + 'img/banner/top/' + topBanner['IMG tag'] + ')'">
+    [style.background-image]="getBackgroundImageUrl()">
     
     <div class="container">
         <!-- Sección izquierda del banner -->
