@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { Path } from '../../config';
 import { ProductsService } from '../../services/products.service';
 import { Subscription, catchError, finalize, of } from 'rxjs';
@@ -24,13 +25,14 @@ interface TopBanner {
 interface ProductData {
   top_banner: string; // JSON serializado con datos del banner
   category:string; // Datos de la categoría
+  url:string;
   [key: string]: any; // Permitir otras propiedades
 }
 
 @Component({
   selector: 'app-header-promotion', // Nombre del componente en HTML
   standalone: true, // Es un componente independiente
-  imports: [CommonModule], // Módulos necesarios
+  imports: [CommonModule, RouterModule], // Módulos necesarios
   templateUrl: './header-promotion.component.html',
   styleUrl: './header-promotion.component.css'
 })
@@ -40,6 +42,7 @@ export class HeaderPromotionComponent implements OnInit, OnDestroy {
   topBanner: TopBanner | null = null; // Datos del banner (null si no hay datos)
   preloader = true; // Controla si se muestra el spinner de carga
   category:string | null = null; // Objeto de la categoría seleccionada
+  url:string | null = null; // Objeto de la categoría seleccionada
   
   private subscription: Subscription | null = null; // Gestiona la suscripción a los datos
 
@@ -82,7 +85,7 @@ export class HeaderPromotionComponent implements OnInit, OnDestroy {
           // Convierte el string JSON a objeto JavaScript
           this.topBanner = JSON.parse(randomItem.top_banner);
           this.category = randomItem['category'];
-          console.log(this.category);
+          this.url = randomItem['url'];
         }
         
       } catch (error) {

@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { HomeBannerComponent } from './home-banner/home-banner.component';
+import { HomeFeaturesComponent } from './home-features/home-features.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [HomeBannerComponent],
+  imports: [HomeBannerComponent, HomeFeaturesComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

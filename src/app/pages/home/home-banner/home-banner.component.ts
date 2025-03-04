@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Path } from '../../../config';
-import { OwlCarouselConfig } from '../../../functions';
+import { OwlCarouselConfig, BackgroundImage } from '../../../functions';
 import { ProductsService } from '../../../services/products.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';   // Para la navegación y directiva routerLink
@@ -75,6 +75,7 @@ export class HomeBannerComponent implements OnInit {
        setTimeout(() => {
         // Inicializar el carrusel de forma segura
         this.OwlCarouselConfig.fnc();
+        this.BackgroundImage.fnc();
         
         // Otra opción podría ser simplemente:
         // $('.owl-slider').owlCarousel({...configuración...});
@@ -82,5 +83,7 @@ export class HomeBannerComponent implements OnInit {
     }
   }
   OwlCarouselConfig = OwlCarouselConfig;
+  BackgroundImage = BackgroundImage;
+
   
 }
