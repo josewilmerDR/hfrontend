@@ -1,0 +1,30 @@
+        <!--=====================================
+    	Home Promotions
+    	======================================-->  
+
+        <!-- Preolod      -->
+        <div *ngIf="preloader" class="d-flex justify-content-center">
+            <!-- Spinner de Bootstrap con color amarillo y márgenes verticales -->
+            <div class="spinner-border text-warning my-5"></div>
+          </div>
+
+
+        <div *ngIf="!preloader" class="ps-promotions">
+
+            <div class="container">
+
+                <div class="row">
+                        
+                    <div 
+                    *ngFor="let promotion of home_promotions; let i = index;"
+                    class="col-md-6 col-12 ">
+                    	<a class="ps-collection" routerLink="product/{{url[i]}}">
+                    		<img src="{{path}}img/products/{{category[i]}}/default/{{promotion}}" alt="">
+                    	</a>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div><!-- End Home Promotions-->

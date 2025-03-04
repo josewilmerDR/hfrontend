@@ -4,7 +4,6 @@ import { OwlCarouselConfig, BackgroundImage } from '../../../functions';
 import { ProductsService } from '../../../services/products.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';   // Para la navegación y directiva routerLink
-import { fakeAsync } from '@angular/core/testing';
 
 
 declare var jQuery:any;
