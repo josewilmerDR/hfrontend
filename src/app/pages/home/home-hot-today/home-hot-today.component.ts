@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Path } from '../../../config';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';   // Para la navegación y directiva routerLink
-import { OwlCarouselConfig, CarouselNavigation, SlickConfig, ProductLightbox } from '../../../functions';
+import { OwlCarouselConfig, CarouselNavigation, SlickConfig, ProductLightbox, CountDown } from '../../../functions';
 import { ProductsService } from '../../../services/products.service';
 
 declare var jQuery: any;
@@ -20,7 +20,7 @@ export class HomeHotTodayComponent implements OnInit {
   indexes: Array<any> = [];
   products: Array<any> = [];
   render: Boolean = true;
-  preloader = false; 
+  preloader = false;
 
   constructor(private productService: ProductsService) { }
 
@@ -31,7 +31,7 @@ export class HomeHotTodayComponent implements OnInit {
     let offerDate = null;
     //TOMAMOS LA DATA DE LOS PRODUCTOS
     this.productService.getData().subscribe((resp: Record<string, any>) => {
-      
+
       //Recoremos cada producto para separar las ofertas y el stock
       let i;
       for (i in resp) {
@@ -77,11 +77,11 @@ export class HomeHotTodayComponent implements OnInit {
 
       // //Recorremos todos los indeces de productos en oferta
       for (let i = 0; i < galleryMix_1.length; i++) {
-         //Recorremos todas las fotografias de la galeria de cada producto
+        //Recorremos todas las fotografias de la galeria de cada producto
         for (let f = 0; f < JSON.parse($(galleryMix_1[i]).attr("gallery")).length; f++) {
-      //Agregar imagenes grandes
+          //Agregar imagenes grandes
           $(galleryMix_2[i]).append(
-          `<div class="item">
+            `<div class="item">
             <a href="assets/img/products/${$(galleryMix_1[i]).attr("category")}/gallery/${JSON.parse($(galleryMix_1[i]).attr("gallery"))[f]}">
               <img src="assets/img/products/${$(galleryMix_1[i]).attr("category")}/gallery/${JSON.parse($(galleryMix_1[i]).attr("gallery"))[f]}">
             </a>
@@ -98,18 +98,76 @@ export class HomeHotTodayComponent implements OnInit {
 
         }
 
-        
+
 
 
       }
 
+      //Efecutar funciones globales con respecto a la galeria Mixta
       OwlCarouselConfig.fnc();
       CarouselNavigation.fnc();
       SlickConfig.fnc();
       ProductLightbox.fnc();
 
+      //Seleccionamos del DOM los elementos de las oferta
+      let offer_1 = $(".offer_1");
+      let offer_2 = $(".offer_2");
+      let offer_3 = $(".offer_3");
+
+      //Recorremos todos los indices de los productos
+
+      for (let i = 0; i < offer_1.length; i++) {
+
+        //Capturamos el array de ofertas de cada producto
+        let offer = JSON.parse($(offer_1[i]).attr("offer"));
+
+        //Capturamos el precio de cada producto
+        let price = Number($(offer_1[i]).attr("price"));
+
+        //Preguntamos si la oferta es del tipo descuento o fijo 
+
+        if (offer[0] == "Disccount") {
+          //Calculamos el precio con descuento
+
+          $(offer_1[i]).html(
+
+            `<span>Save <br> $${(price * offer[1] / 100).toFixed(2)}</span>`
+
+          );
+
+          $(offer_2[i]).html(`$${(price-(price * offer[1] / 100)).toFixed(2)}`);
+        }
+
+        //Preguntamos si la oferta es del tipo fijo
+        if (offer[0] == "Fixed") {
+          //Calculamos el precio con descuento
+          $(offer_1[i]).html(
+
+            `<span>Save <br> $${offer[1]}</span>`
+
+          );
+
+          $(offer_2[i]).html(`$${(price - offer[1]).toFixed(2)}`);
+
+        }
+
+        //Agregamos la fecha al descontador de la fecha
+        $(offer_3[i]).attr("data-time", 
+            new Date(
+              parseInt(offer[2].split('-')[0]),
+              parseInt(offer[2].split('-')[1]) - 1,
+              parseInt(offer[2].split('-')[2])
+            )
+        );
+
+
+        //Ejecutamos la funcion global de contador regresivo
+        CountDown.fnc();
+
+      }
+
     }
   }
 
-  
+
 }

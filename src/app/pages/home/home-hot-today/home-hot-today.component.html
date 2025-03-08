@@ -63,8 +63,11 @@
 
                         </div>
 
-                        <div class="ps-product__badge">
-                          <span>Save <br> $280.000</span>
+                        <div 
+                        [attr.offer]="products[i].offer"
+                        [attr.price]="products[i].price"
+                        class="ps-product__badge offer_1">
+                            <!-- Aqui se muestra el descuento -->
                         </div>
 
                       </div>
@@ -74,15 +77,8 @@
                     <div class="ps-product__variants galleryMix_3" data-item="4" data-md="3" data-sm="3"
                       data-arrow="false">
 
-                      <!-- <div class="item">
-                        <img src="{{path}}img/products/deal-hot/a-1.jpg" alt="">
-                      </div>
-                      <div class="item">
-                        <img src="{{path}}img/products/deal-hot/a-2.jpg" alt="">
-                      </div>
-                      <div class="item">
-                        <img src="{{path}}img/products/deal-hot/a-3.jpg" alt="">
-                      </div> -->
+                      <!-- Aqui va la galeria de imagenes pequeña con codigo ts-->
+
 
                     </div>
 
@@ -96,7 +92,13 @@
 
                     <div class="ps-product__meta">
 
-                      <h4 class="ps-product__price sale">$36.78 <del> ${{products[i].price}}</del></h4>
+                      <h4 class="ps-product__price sale">
+                        
+                        <span class="offer_2">
+                          <!-- Aqui se muestra el descuento -->
+                        </span> 
+                        
+                        <del> ${{products[i].price}}</del></h4>
 
                       <div class="ps-product__rating">
 
@@ -126,7 +128,7 @@
 
                       <p>Expires In</p>
 
-                      <ul class="ps-countdown" data-time="July 21, 2020 23:00:00">
+                      <ul class="ps-countdown offer_3" [attr.data-time]="">
 
                         <li><span class="days"></span>
                           <p>Days</p>

@@ -175,45 +175,75 @@ export let SlickConfig = {
 
 
 export let ProductLightbox = {
-  fnc: function () {var product = $('.ps-product--detail');
+  fnc: function () {
+    var product = $('.ps-product--detail');
     if (product.length > 0) {
-        $('.ps-product__gallery').lightGallery({
-            selector: '.item a',
-            thumbnail: true,
-            share: false,
-            fullScreen: false,
-            autoplay: false,
-            autoplayControls: false,
-            actualSize: false
-        });
-        if (product.hasClass('ps-product--sticky')) {
-            $('.ps-product__thumbnail').lightGallery({
-                selector: '.item a',
-                thumbnail: true,
-                share: false,
-                fullScreen: false,
-                autoplay: false,
-                autoplayControls: false,
-                actualSize: false
-            });
-        }
-    }
-    $('.ps-gallery--image').lightGallery({
-        selector: '.ps-gallery__item',
+      $('.ps-product__gallery').lightGallery({
+        selector: '.item a',
         thumbnail: true,
         share: false,
         fullScreen: false,
         autoplay: false,
         autoplayControls: false,
         actualSize: false
+      });
+      if (product.hasClass('ps-product--sticky')) {
+        $('.ps-product__thumbnail').lightGallery({
+          selector: '.item a',
+          thumbnail: true,
+          share: false,
+          fullScreen: false,
+          autoplay: false,
+          autoplayControls: false,
+          actualSize: false
+        });
+      }
+    }
+    $('.ps-gallery--image').lightGallery({
+      selector: '.ps-gallery__item',
+      thumbnail: true,
+      share: false,
+      fullScreen: false,
+      autoplay: false,
+      autoplayControls: false,
+      actualSize: false
     });
     $('.ps-video').lightGallery({
-        thumbnail: false,
-        share: false,
-        fullScreen: false,
-        autoplay: false,
-        autoplayControls: false,
-        actualSize: false
+      thumbnail: false,
+      share: false,
+      fullScreen: false,
+      autoplay: false,
+      autoplayControls: false,
+      actualSize: false
+    });
+  }
+}
+
+
+
+export let CountDown = {
+  fnc: function () {
+    var time = $(".ps-countdown");
+    time.each(function (this: any) {
+      var el = $(this),
+        value = $(this).data('time');
+      var countDownDate = new Date(value).getTime();
+      var timeout = setInterval(function () {
+        var now = new Date().getTime(),
+          distance = countDownDate - now;
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24)),
+          hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+          minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+          seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        el.find('.days').html(days);
+        el.find('.hours').html(hours);
+        el.find('.minutes').html(minutes);
+        el.find('.seconds').html(seconds);
+        if (distance < 0) {
+          clearInterval(timeout);
+          el.closest('.ps-section').hide();
+        }
+      }, 2000);
     });
   }
 }

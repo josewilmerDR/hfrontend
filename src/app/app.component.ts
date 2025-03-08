@@ -319,33 +319,33 @@ export class AppComponent implements OnInit {
           }
       }
   
-      function mapConfig() {
-          var map = $('#contact-map');
-          if (map.length > 0) {
-              map.gmap3({
-                  address: map.data('address'),
-                  zoom: map.data('zoom'),
-                  mapTypeId: google.maps.MapTypeId.ROADMAP,
-                  scrollwheel: false
-              }).marker(function (map: { getCenter: () => any; }) {
-                  return {
-                      position: map.getCenter(),
-                      icon: 'img/marker.png',
-                  };
-              }).infowindow({
-                  content: map.data('address')
-              }).then(function (this: any, infowindow: { open: (arg0: any, arg1: any) => void; }) {
-                  var map = this.get(0);
-                  var marker = this.get(1);
-                  marker.addListener('click', function () {
-                      infowindow.open(map, marker);
-                  });
-              });
-              return true;
-          } else {
-              return false;
-          }
-      }
+    //   function mapConfig() {
+    //       var map = $('#contact-map');
+    //       if (map.length > 0) {
+    //           map.gmap3({
+    //               address: map.data('address'),
+    //               zoom: map.data('zoom'),
+    //               mapTypeId: google.maps.MapTypeId.ROADMAP,
+    //               scrollwheel: false
+    //           }).marker(function (map: { getCenter: () => any; }) {
+    //               return {
+    //                   position: map.getCenter(),
+    //                   icon: 'img/marker.png',
+    //               };
+    //           }).infowindow({
+    //               content: map.data('address')
+    //           }).then(function (this: any, infowindow: { open: (arg0: any, arg1: any) => void; }) {
+    //               var map = this.get(0);
+    //               var marker = this.get(1);
+    //               marker.addListener('click', function () {
+    //                   infowindow.open(map, marker);
+    //               });
+    //           });
+    //           return true;
+    //       } else {
+    //           return false;
+    //       }
+    //   }
   
     //   function slickConfig() {
     //       var product = $('.ps-product--detail');
@@ -580,30 +580,30 @@ export class AppComponent implements OnInit {
           });
       }
   
-      function countDown() {
-          var time = $(".ps-countdown");
-          time.each(function (this:any) {
-              var el = $(this),
-                  value = $(this).data('time');
-              var countDownDate = new Date(value).getTime();
-              var timeout = setInterval(function () {
-                  var now = new Date().getTime(),
-                      distance = countDownDate - now;
-                  var days = Math.floor(distance / (1000 * 60 * 60 * 24)),
-                      hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-                      minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-                      seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                  el.find('.days').html(days);
-                  el.find('.hours').html(hours);
-                  el.find('.minutes').html(minutes);
-                  el.find('.seconds').html(seconds);
-                  if (distance < 0) {
-                      clearInterval(timeout);
-                      el.closest('.ps-section').hide();
-                  }
-              }, 1000);
-          });
-      }
+    //   function countDown() {
+    //       var time = $(".ps-countdown");
+    //       time.each(function (this:any) {
+    //           var el = $(this),
+    //               value = $(this).data('time');
+    //           var countDownDate = new Date(value).getTime();
+    //           var timeout = setInterval(function () {
+    //               var now = new Date().getTime(),
+    //                   distance = countDownDate - now;
+    //               var days = Math.floor(distance / (1000 * 60 * 60 * 24)),
+    //                   hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+    //                   minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+    //                   seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    //               el.find('.days').html(days);
+    //               el.find('.hours').html(hours);
+    //               el.find('.minutes').html(minutes);
+    //               el.find('.seconds').html(seconds);
+    //               if (distance < 0) {
+    //                   clearInterval(timeout);
+    //                   el.closest('.ps-section').hide();
+    //               }
+    //           }, 1000);
+    //       });
+    //   }
   
       function productFilterToggle() {
           $('.ps-filter__trigger').on('click', function (this:any, e:Event) {
@@ -768,10 +768,10 @@ export class AppComponent implements OnInit {
           backToTop();
           stickyHeader();
           filterSlider();
-          mapConfig();
+        //   mapConfig();
           modalInit();
           searchInit();
-          countDown();
+        //   countDown();
           mainSlider();
           parallax();
           stickySidebar();
