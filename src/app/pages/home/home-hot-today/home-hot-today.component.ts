@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Path } from '../../../config';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';   // Para la navegación y directiva routerLink
-import { OwlCarouselConfig, CarouselNavigation, SlickConfig, ProductLightbox, CountDown } from '../../../functions';
+import { OwlCarouselConfig, CarouselNavigation, SlickConfig, ProductLightbox, CountDown, Rating } from '../../../functions';
 import { ProductsService } from '../../../services/products.service';
 
 declare var jQuery: any;
@@ -75,8 +75,22 @@ export class HomeHotTodayComponent implements OnInit {
       let galleryMix_2 = $(".galleryMix_2");
       let galleryMix_3 = $(".galleryMix_3");
 
+      //Seleccionamos del DOM los elementos de las oferta
+      let offer_1 = $(".offer_1");
+      let offer_2 = $(".offer_2");
+      let offer_3 = $(".offer_3");
+
+      //Seleccionamos del DOM los elementos de la reseña
+      let review_1 = $(".review_1");
+      let review_2 = $(".review_2");
+      let review_3 = $(".review_3");
+
+
+
       // //Recorremos todos los indeces de productos en oferta
       for (let i = 0; i < galleryMix_1.length; i++) {
+        //RELACIONADO CON LA GALERIA MIXTA
+
         //Recorremos todas las fotografias de la galeria de cada producto
         for (let f = 0; f < JSON.parse($(galleryMix_1[i]).attr("gallery")).length; f++) {
           //Agregar imagenes grandes
@@ -98,25 +112,7 @@ export class HomeHotTodayComponent implements OnInit {
 
         }
 
-
-
-
-      }
-
-      //Efecutar funciones globales con respecto a la galeria Mixta
-      OwlCarouselConfig.fnc();
-      CarouselNavigation.fnc();
-      SlickConfig.fnc();
-      ProductLightbox.fnc();
-
-      //Seleccionamos del DOM los elementos de las oferta
-      let offer_1 = $(".offer_1");
-      let offer_2 = $(".offer_2");
-      let offer_3 = $(".offer_3");
-
-      //Recorremos todos los indices de los productos
-
-      for (let i = 0; i < offer_1.length; i++) {
+        //RELACIONADO CON LAS OFERTAS
 
         //Capturamos el array de ofertas de cada producto
         let offer = JSON.parse($(offer_1[i]).attr("offer"));
@@ -135,7 +131,7 @@ export class HomeHotTodayComponent implements OnInit {
 
           );
 
-          $(offer_2[i]).html(`$${(price-(price * offer[1] / 100)).toFixed(2)}`);
+          $(offer_2[i]).html(`$${(price - (price * offer[1] / 100)).toFixed(2)}`);
         }
 
         //Preguntamos si la oferta es del tipo fijo
@@ -152,19 +148,51 @@ export class HomeHotTodayComponent implements OnInit {
         }
 
         //Agregamos la fecha al descontador de la fecha
-        $(offer_3[i]).attr("data-time", 
-            new Date(
-              parseInt(offer[2].split('-')[0]),
-              parseInt(offer[2].split('-')[1]) - 1,
-              parseInt(offer[2].split('-')[2])
-            )
+        $(offer_3[i]).attr("data-time",
+          new Date(
+            parseInt(offer[2].split('-')[0]),
+            parseInt(offer[2].split('-')[1]) - 1,
+            parseInt(offer[2].split('-')[2])
+          )
         );
 
+        //RELACIONADO CON LAS RESEÑAS
 
-        //Ejecutamos la funcion global de contador regresivo
-        CountDown.fnc();
+        //Calculamos el total de las calificaciones de las reseñas
+        let totalReview = 0;
+        for (let f = 0; f < JSON.parse($(review_1[i]).attr("reviews")).length; f++) {
+          totalReview += Number(JSON.parse($(review_1[i]).attr("reviews"))[f]["review"]);
 
+        }
+
+        //Imprimimos el total de las reseñas para cada producto
+        let rating = Math.round(totalReview / JSON.parse($(review_1[i]).attr("reviews")).length);
+        $(review_3[i]).html(rating);
+
+        for (let f = 0; f <= 5; f++) {
+          
+            $(review_2[i]).append(`<option value="2">${f}</option>`);
+            
+            if(rating == f){
+              $(review_2[i]).children('option').val(1);
+            }
+        }
       }
+
+      //Efecutar funciones globales con respecto a la galeria Mixta
+      OwlCarouselConfig.fnc();
+      CarouselNavigation.fnc();
+      SlickConfig.fnc();
+      ProductLightbox.fnc();
+
+      //Ejecutamos la funcion global de contador regresivo
+      setTimeout(() => {
+        // console.log("Inicializando contadores después de establecer todos los data-time");
+        CountDown.fnc();
+      }, 100);
+
+      //Ejecutamos la funcion global de calificación de las reseñas
+      Rating.fnc();
 
     }
   }

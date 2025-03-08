@@ -1,6 +1,7 @@
 declare var jQuery: any;
 declare var $: any;
 
+//Plugin que muestra el carrusel de productos. Los Productos arriba del la oferta del dia.
 export let OwlCarouselConfig = {
   fnc: function () {
     var target = $('.owl-slider');
@@ -73,7 +74,7 @@ export let OwlCarouselConfig = {
 }
 
 
-
+//Redibuja el background de del carrusel de productos una vez carga el DOM por primera vez
 export let BackgroundImage = {
   fnc: function () {
     var databackground = $('[data-background]');
@@ -173,7 +174,7 @@ export let SlickConfig = {
   }
 }
 
-
+//Plugin que activa el carrusel de productos, especificamente muestre los productos en miniatura 
 export let ProductLightbox = {
   fnc: function () {
     var product = $('.ps-product--detail');
@@ -219,31 +220,151 @@ export let ProductLightbox = {
   }
 }
 
-
-
+//Plugin que activa el contador de tiempo regresivo
 export let CountDown = {
   fnc: function () {
+    // console.log("CountDown function called");
     var time = $(".ps-countdown");
-    time.each(function (this: any) {
-      var el = $(this),
-        value = $(this).data('time');
-      var countDownDate = new Date(value).getTime();
-      var timeout = setInterval(function () {
-        var now = new Date().getTime(),
-          distance = countDownDate - now;
-        var days = Math.floor(distance / (1000 * 60 * 60 * 24)),
-          hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-          minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-          seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        el.find('.days').html(days);
-        el.find('.hours').html(hours);
-        el.find('.minutes').html(minutes);
-        el.find('.seconds').html(seconds);
-        if (distance < 0) {
-          clearInterval(timeout);
-          el.closest('.ps-section').hide();
+    // console.log("Found countdown elements:", time.length);
+
+    // Almacena los valores previos para comparar
+    const prevValues = new Map();
+
+    time.each(function (this: any, index: any) {
+      const el = $(this);
+      const counterId = `countdown-${index}`;
+
+      // Verificar y loguear el valor de data-time
+      const rawValue = el.attr("data-time");
+      // console.log(`Element ${index} data-time value:`, rawValue);
+
+      // Intentar diferentes formatos para la fecha
+      let countDownDate: number | null = null;
+
+      try {
+        // Si es un objeto Date serializado (toString)
+        if (typeof rawValue === 'string' && rawValue.includes('GMT')) {
+          countDownDate = new Date(rawValue).getTime();
         }
-      }, 2000);
+        // Si es un timestamp en milisegundos
+        else if (!isNaN(Number(rawValue))) {
+          countDownDate = Number(rawValue);
+        }
+        // Si es un formato ISO o similar
+        else {
+          countDownDate = new Date(rawValue).getTime();
+        }
+
+        // console.log(`Countdown date parsed for element ${index}:`, new Date(countDownDate));
+
+        if (isNaN(countDownDate)) {
+          console.error(`Invalid date format for element ${index}:`, rawValue);
+          return; // Skip this element
+        }
+      } catch (error) {
+        console.error(`Error parsing date for element ${index}:`, error);
+        return; // Skip this element
+      }
+
+      // Inicializar valores previos
+      prevValues.set(counterId, { days: -1, hours: -1, minutes: -1, seconds: -1 });
+
+      // Función para actualizar el contador
+      function updateCountdown() {
+        try {
+          // Check if countDownDate is null before using it
+          if (countDownDate === null) {
+            console.error(`CountDown date is null for element ${index}`);
+            clearInterval(timeInterval);
+            return;
+          }
+
+          const now = new Date().getTime();
+          const distance = countDownDate - now;
+
+          // console.log(`Element ${index} - Distance:`, distance);
+
+          if (distance < 0) {
+            // Si el tiempo ha expirado, limpiar intervalo y ocultar sección
+            clearInterval(timeInterval);
+            el.closest('.ps-section').hide();
+            return;
+          }
+
+          // Calcular los nuevos valores
+          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+          // console.log(`Element ${index} - Values:`, { days, hours, minutes, seconds });
+
+          // Obtener valores previos
+          const prev = prevValues.get(counterId);
+
+          // Actualizar solo los valores que han cambiado
+          if (prev && days !== prev.days) {
+            el.find('.days').html(days.toString());
+            prev.days = days;
+          }
+
+          if (prev && hours !== prev.hours) {
+            el.find('.hours').html(hours.toString().padStart(2, '0'));
+            prev.hours = hours;
+          }
+
+          if (prev && minutes !== prev.minutes) {
+            el.find('.minutes').html(minutes.toString().padStart(2, '0'));
+            prev.minutes = minutes;
+          }
+
+          if (prev && seconds !== prev.seconds) {
+            el.find('.seconds').html(seconds.toString().padStart(2, '0'));
+            prev.seconds = seconds;
+          }
+        } catch (error) {
+          console.error(`Error updating countdown for element ${index}:`, error);
+        }
+      }
+
+      // Ejecutar inmediatamente para mostrar los valores iniciales
+      updateCountdown();
+
+      // Establecer intervalo
+      const timeInterval = setInterval(updateCountdown, 1000);
+
+      // Guardar el ID del intervalo en el elemento para poder limpiarlo más tarde si es necesario
+      el.data('countdownInterval', timeInterval);
+    });
+  },
+
+  // Método para detener todos los contadores
+  stop: function () {
+    $(".ps-countdown").each(function (this: any) {
+      const interval = $(this).data('countdownInterval');
+      if (interval) {
+        clearInterval(interval);
+      }
     });
   }
 }
+
+//Plugin que activa las estrellas de calificación
+export let Rating = {
+  fnc: function () {
+    $('select.ps-rating').each(function (this: any) {
+      var readOnly;
+      if ($(this).attr('data-read-only') == 'true') {
+        readOnly = true
+      } else {
+        readOnly = false;
+      }
+      $(this).barrating({
+        theme: 'fontawesome-stars',
+        readonly: readOnly,
+        emptyValue: '0'
+      });
+    });
+  }
+}
+
